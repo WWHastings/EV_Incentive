@@ -1,0 +1,12 @@
+name: EV_Incentive
+title: EV_Incentive
+username:
+account: wwhastings
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 359434
+bundleId: 1424224
+url: https://wwhastings.shinyapps.io/EV_Incentive/
+when: 1528775867.49938
+asMultiple: FALSE
+asStatic: FALSE
