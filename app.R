@@ -6,6 +6,7 @@ library(reshape2)
 library(ggplot2)
 library(bsplus)
 
+
 # seperate normal distribution
 # calculate the environmental benefits, health benenfits. 
 #reactive?
@@ -26,7 +27,7 @@ ui <-  dashboardPage(
   dashboardBody(tabItems(
     tabItem(tabName = "tab_1",
             fluidPage(h3("Tool Overview"),
-                      box(width = 12, h4("Introduction"),p("This is a tool meant to help Community Choice Energy agencies predict costs and benefits associated with offering an incentive program to subsidize residents’ purchases of battery electric vehicles (BEVs) and/or plug-in hybrid electric vehicles (PHEVs). Based on a variety of program, agency, and other specifications, the model predicts the number of vehicle purchases that will be directly caused by an incentive program, then calculates associated greenhouse gas (GHG) emission reductions and health impacts."), p("This tool is available at www.ccetoolkit.weebly.com and from the Center for Climate Protection (www.climateprotection.org). Also available are tool documentation and the same tool in Microsoft Excel format, with the addition of the ability to incorporate smart chargers.")
+                      box(width = 12, h4("Introduction"),p("This is a tool meant to help Community Choice Energy agencies predict costs and benefits associated with offering an incentive program to subsidize residents’ purchases of battery electric vehicles (BEVs) and/or plug-in hybrid electric vehicles (PHEVs). Based on a variety of program, agency, and other specifications, the model predicts the number of vehicle purchases that will be directly caused by an incentive program, and then calculates associated financial implications, greenhouse gas (GHG) emission reductions, and health impacts."), p("This tool is available at www.ccetoolkit.weebly.com and from the Center for Climate Protection (www.climateprotection.org). Also available are tool documentation and the same tool in Microsoft Excel format, with the addition of the ability to incorporate smart chargers.")
                       ),
                       box(width = 12, h4("Using the Tool: Inputs"),p("The tool requires that users enter values in at least the Agency main inputs and Energy mix inputs sections of the Inputs page. These sections include: Agency, Total Incentives Budget, Year, BEV Incentive, PHEV Incentive, Incentive Amounts, and Energy mix. There are a variety of additional fields in the Inputs page that allow users to add further program specifications as desired. A detailed explanation of all available input options is included in the User Guide page.")
                       ),
@@ -36,7 +37,7 @@ ui <-  dashboardPage(
                           tags$div(tags$ul(
                             tags$li("Total incentives used BEV/PHEV: The tool’s prediction for number of incentives used for BEVs and PHEVs, limited either by budget or overall demand.
 "), 
-                            tags$li("Purchases caused by incentives BEV/PHEV: The tool’s prediction for number of vehicle purchases that would not have occurred without the incentive offering. This is the number of vehicles used to calculate program benefits"),
+                            tags$li("Purchases caused by incentives BEV/PHEV: The tool’s prediction for number of vehicle purchases that would not have occurred without the incentive offering. This is the number of vehicles used to calculate program benefits."),
                                            tags$li("GHG emission reductions: Predicted GHG emissions avoided because of the incentive program, in tons of CO2e."),
                                            tags$li("Cost of GHG emission reduction: The cost to the agency per ton of CO2e emissions avoided through the incentive program. This number is calculated by dividing total costs by tons of CO2e reduced, and so does not capture other benefits from the incentive program.
 "),
@@ -57,7 +58,7 @@ ui <-  dashboardPage(
                       ))) , 
     tabItem(tabName = "tab_2",
             fluidPage(h3("User Guide"),
-                      box( width = 12, h4("Basic Information"),p("These inputs are required to run the tool."),tags$div(tags$ul(tags$li("Agency: The CCE agency that will run the program. The model uses this information to set the correct population level and predict impacts on local pollutant  emissions"), 
+                      box( width = 12, h4("Basic Information"),p("These inputs are required to run the tool."),tags$div(tags$ul(tags$li("Agency: The CCE agency that will run the program. The model uses this information to set the correct population level and predict impacts on local pollutant  emissions."), 
                                                  tags$li("Total Incentives Budget: The total available budget for BEV and PHEV incentives."),
                                                  tags$li("Year: The year that the incentive program will run."),
                                                  tags$li("BEV (Battery Electric Vehicle) Incentive : The dollar amount that the agency will offer for each BEV purchase."), 
@@ -567,20 +568,27 @@ server <- function(input, output) {
     E_gas <- subset(G_table, Year==year & Agency==agency)
     Emission_gas <- E_gas$CO2e/10^6
     
-    Emission_elec_CO2 <- (E1*E_table$CO2e[1]+E2*E_table$CO2e[2]+E3*E_table$CO2e[3]+E4*E_table$CO2e[4]+E5*E_table$CO2e[5]+E6*E_table$CO2e[6]+E7*E_table$CO2e[7]+E8*E_table$CO2e[8]+E9*E_table$CO2e[9]+E10*E_table$CO2e[10])/1000
+    Emission_elec_CO2 <- (E1*E_table$CO2e[1]+E2*E_table$CO2e[2]+E3*E_table$CO2e[3]+E4*E_table$CO2e[4]+E5*E_table$CO2e[5]+E7*E_table$CO2e[7]+E8*E_table$CO2e[8]+E9*E_table$CO2e[9]+E10*E_table$CO2e[10])/1000
     
-    Emission_elec_PM <- (E1*E_table$PM[1]+E2*E_table$PM[2]+E3*E_table$PM[3]+E4*E_table$PM[4]+E5*E_table$PM[5]+E6*E_table$PM[6]+E7*E_table$PM[7]+E8*E_table$PM[8]+E9*E_table$PM[9]+E10*E_table$PM[10])/1000
+    Emission_elec_PM <- (E1*E_table$PM[1]+E2*E_table$PM[2]+E3*E_table$PM[3]+E4*E_table$PM[4]+E5*E_table$PM[5]+E7*E_table$PM[7]+E8*E_table$PM[8]+E9*E_table$PM[9]+E10*E_table$PM[10])/1000
     
-    Emission_elec_Nox <- (E1*E_table$Nox[1]+E2*E_table$Nox[2]+E3*E_table$Nox[3]+E4*E_table$Nox[4]+E5*E_table$Nox[5]+E6*E_table$Nox[6]+E7*E_table$Nox[7]+E8*E_table$Nox[8]+E9*E_table$Nox[9]+E10*E_table$Nox[10])/1000
+    Emission_elec_Nox <- (E1*E_table$Nox[1]+E2*E_table$Nox[2]+E3*E_table$Nox[3]+E4*E_table$Nox[4]+E5*E_table$Nox[5]+E7*E_table$Nox[7]+E8*E_table$Nox[8]+E9*E_table$Nox[9]+E10*E_table$Nox[10])/1000
     
-    Emission_elec_Sox <- (E1*E_table$Sox[1]+E2*E_table$Sox[2]+E3*E_table$Sox[3]+E4*E_table$Sox[4]+E5*E_table$Sox[5]+E6*E_table$Sox[6]+E7*E_table$Sox[7]+E8*E_table$Sox[8]+E9*E_table$Sox[9]+E10*E_table$Sox[10])/1000
+    Emission_elec_Sox <- (E1*E_table$Sox[1]+E2*E_table$Sox[2]+E3*E_table$Sox[3]+E4*E_table$Sox[4]+E5*E_table$Sox[5]+E7*E_table$Sox[7]+E8*E_table$Sox[8]+E9*E_table$Sox[9]+E10*E_table$Sox[10])/1000
     
+    Biogenic_elec <- E6*E_table$CO2e[6]/1000
     
     Annual_GHG_EV <- (Aveg_VTM*Emission_gas-Emission_elec_CO2*Aveg_VTM*Efficiency)*TCM[1,2]*(1+Rebound)/(1+Trans)
     Annual_GHG_PHEV <-(Aveg_VTM*Emission_gas*(1-PHEV_gas_perc)-Emission_elec_CO2*Aveg_VTM*Efficiency*PHEV_gas_perc)*TCM[2,2]*(1+Rebound)/(1+Trans)
+    
+    Annual_GHG_EV_Biogenic <-(Biogenic_elec*Aveg_VTM*Efficiency)*TCM[1,2]*(1+Rebound)/(1+Trans)
+    Annual_GHG_PHEV_Biogenic <-(Biogenic_elec*Aveg_VTM*Efficiency*PHEV_gas_perc)*TCM[2,2]*(1+Rebound)/(1+Trans)
+    
     Disc_GHG_EV <- Annual_GHG_EV/discount*(1-1/(1+discount)^Lifetime)
     Disc_GHG_PHEV <- Annual_GHG_PHEV/discount*(1-1/(1+discount)^Lifetime)
+    
     Total_GHG <- (Annual_GHG_EV+Annual_GHG_PHEV)*Lifetime
+    Biogenic <- (Annual_GHG_EV_Biogenic+Annual_GHG_PHEV_Biogenic)*Lifetime
     Total_disc_GHG <- Disc_GHG_EV + Disc_GHG_PHEV 
     GHG_benefits <- carbon_price*Total_disc_GHG
     
@@ -606,9 +614,9 @@ server <- function(input, output) {
     Revenue <- Elec_price*(Aveg_VTM*Efficiency*TCM[1,2]*(1+Rebound)/(1+Trans)+Aveg_VTM*Efficiency*PHEV_gas_perc*TCM[2,2]*(1+Rebound)/(1+Trans))/Adiscount*(1-1/(1+Adiscount)^Lifetime)*input$Profit/100
     BCR <- (GHG_benefits+H_impact+Revenue)/(Admin_cost+Imp_cost+Total_rebates)
     Cost_GHG <- (Admin_cost+Imp_cost+Total_rebates)/Total_GHG
-    Benefit <- matrix(c(Total_GHG, Cost_GHG, GHG_benefits, H_impact,   Admin_cost+Imp_cost+Total_rebates-Revenue,Admin_cost,Imp_cost,Total_rebates,Revenue,BCR),nrow=10)
+    Benefit <- matrix(c(Total_GHG, Biogenic, Cost_GHG, GHG_benefits, H_impact,   Admin_cost+Imp_cost+Total_rebates-Revenue,Admin_cost,Imp_cost,Total_rebates,Revenue,BCR),nrow=11)
     rownames(Benefit)<- c(
-      "GHG emission reduction (tons CO2e)","Cost of GHG reduction (dollar/tonCO2e)","GHG emission reduction benefits ($)", "Health benefits ($)","Total program costs ($)*","Administrative costs ($)", "Implementation costs ($)", "Total rebate costs ($)","Revenue ($)","Benefit cost ratio"
+      "Anthropogenic GHG emission reduction (tons CO2e)","Biogenic GHG emission from EV charging (tons CO2e)","Cost of GHG reduction (dollar/tonCO2e)","GHG emission reduction benefits ($)", "Health benefits ($)","Total program costs ($)*","Administrative costs ($)", "Implementation costs ($)", "Total rebate costs ($)","Revenue ($)","Benefit cost ratio"
       
     )
     
